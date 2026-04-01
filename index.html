@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="styles.css" />
+   
+  </head>
+    
+      
+  <body>
+    <div class="app">
+      <h1>TASK MANAGER</h1>
+      <p>Organiza tu día</p>
+      <div class="contador-tareas">
+        <p>
+          Tienes <span id="to-do-task">0</span> completadas de 
+          <span id="total-task">0</span>
+        </p>
+      </div>
+
+      <div class="formulario-tareas">
+        <label for="tarea-input"></label>
+        <input id="tarea-input" type="text" placeholder="Escribe una tarea" />
+        
+        <br />
+        <label for="categoria">Elige una categoria</label>
+        <select id="categoria">
+          <option></option>
+          <option value="trabajo">💼Trabajo</option>
+          <option value="estudio">📚Estudio</option>
+          <option value="personal">🏠Personal</option>
+          <option value="urgente">🔴Urgente</option>
+          <option value="otra">🏷️Otra</option>
+        </select>
+      </div>
+
+      <br />
+      <div class="action-button">
+        <button id = "agregarTarea">+ Agregar tarea</button>
+        <span id="input-vacio"></span>
+      </div>
+
+      <br />
+
+      <div id= "lista-tarea" class="lista-tarea">
+        
+      </div>
+    </div>
+    
+
+   <script src="taskManager-App.js"></script>
+
+  </body>
+</html>

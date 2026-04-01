@@ -1,0 +1,18 @@
+/* Estado base */
+#input-vacio {
+  display: none; 
+  color: red;
+}
+
+/* Estado activo: El JS añade esta clase */
+#input-vacio.mostrarError {
+  display: block;
+}
+
+#lista-tareas{
+    display: none;
+}
+#lista-tareas.agregarTarea{
+    display: block;
+}
+
