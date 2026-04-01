@@ -159,22 +159,23 @@ function marcarTareaUrgente(idTarea) {
 }
 
 function eliminarTarea(idTarea) {
-  const respuesta = confirm("¿Desea eliminar la tarea?");
+  //confirmar respuesta de si desea eliminar la tarea
+  const respuesta = confirm("¿Desea eliminar la tarea?")
 
-  if (!respuesta) {
+if (!respuesta) {
     return;
   }
-  tareas = tareas.filter((tarea) => {
-    if (idTarea === tarea.id && tarea.completada) {
-      contador--;
-      toDoTask.textContent = contador;
-    }
-    return idTarea !== tarea.id;
-  });
+  //se realiza filter con las tareas que no se quieren eliminar 
+tareas = tareas.filter(tarea =>  tarea.id !== idTarea)
+//se asigna al contador el tmañao de las tareas completadas actuales
+toDoTask.textContent = tareas.filter(tarea => tarea.completada).length
+
   contadorTareas();
   mostrarTareas();
 }
 
+
+//? “Limpiar completadas” (con confirm y contador)
 /*
 se debe crear los acciones para marcar la tarea con estadoscompletada o urgente, adicionalmente
 la accion de eliminar💼📚🏠🔴🏷️❌
