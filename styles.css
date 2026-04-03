@@ -16,3 +16,10 @@
     display: block;
 }
 
+#eliminarCompletadas{
+    display: none;
+}
+#eliminarCompletadas.oculto{
+    display: block;
+}
+

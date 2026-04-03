@@ -46,6 +46,7 @@ let inputCategoria = document.getElementById("categoria");
 let otraCategoria = document.getElementById("otra-categoria");
 let inputError = document.getElementById("input-vacio");
 let botonAgregar = document.getElementById("agregarTarea");
+let botonEliminarCompletadas = document.getElementById("eliminarCompletadas")
 let tareas = [];
 let categorias = ["trabajo", "estudio", "personal","urgente"]
 let contador = 0;
@@ -54,6 +55,7 @@ const MOSTRARERROR = "mostrarError";
 botonAgregar.addEventListener("click", () => {
   agregarTarea();
 });
+
 
 /*
 La categoria otra podria tener un onclick que accione una funcion que lea ese input,
@@ -78,23 +80,31 @@ function agregarTarea() {
     tareas.push(nuevaTarea);
     mostrarTareas();
     contadorTareas();
-
     console.log("Tarea agregada:", nombreTarea);
     alert(
-      "✅ " + nombreTarea + " Tarea agregada con categoria " + categoriaTarea,
+      "✅ " + nombreTarea + " Tarea agregada con categoria " + categoriaTarea
     );
     limpiarInput();
   } else {
     visualizarError();
   }
 }
-
+//?actualizar funcion,  calcular total,calcular completadas, actualizar ambos spans
 function contadorTareas() {
-  let totaltareas = 0;
-  totaltareas = tareas.length;
-  totalTask.textContent = totaltareas;
+  totalTask.textContent= tareas.length
+  const tareascompletadas =  tareas.filter(tarea => tarea.completada).length
+  toDoTask.textContent =tareascompletadas
+
+  if (tareascompletadas > 0) {
+    botonEliminarCompletadas.classList.add("oculto")
+} else {
+    botonEliminarCompletadas.classList.remove("oculto")
+}
 }
 
+function actualizarVisibilidadBoton(){
+  
+}
 function mostrarTareas() {
   listaTarea.innerHTML = "";
   for (const tarea of tareas) {
@@ -112,6 +122,7 @@ function mostrarTareas() {
     tareaElement.innerHTML = tarjetaTarea;
     listaTarea.appendChild(tareaElement);
   }
+
 }
 
 function visualizarError() {
@@ -125,9 +136,8 @@ function ocultarError() {
 
 function limpiarInput() {
   inputTarea.value = "";
-  categoria.value = "";
+  inputCategoria.value = "";
 }
-
 
 function marcarTareaHecha(idTarea) {
 
@@ -142,7 +152,7 @@ function marcarTareaHecha(idTarea) {
       );
     }
     //aplicamos filter para conocer las tareas completadas y conocer el tamaño de los elemtnos que si cumplen la condicion
-    toDoTask.textContent = tareas.filter(tarea => tarea.completada === true).length
+    contadorTareas()
     //renderizamos el html
     mostrarTareas()
  
@@ -168,14 +178,25 @@ if (!respuesta) {
   //se realiza filter con las tareas que no se quieren eliminar 
 tareas = tareas.filter(tarea =>  tarea.id !== idTarea)
 //se asigna al contador el tmañao de las tareas completadas actuales
-toDoTask.textContent = tareas.filter(tarea => tarea.completada).length
+contadorTareas();
 
-  contadorTareas();
   mostrarTareas();
 }
+//? “Limpiar completadas” (con confirm y contador de cuantas se van a eliminar)
+function limpiarCompletadas(){
 
 
-//? “Limpiar completadas” (con confirm y contador)
+const tareascompletadas = tareas.filter(tarea => tarea.completada).length
+let estado = confirm(`Hay ${tareascompletadas} completadas, ¿desea eliminarlas?`)
+if(!estado){
+  return;
+}
+tareas= tareas.filter(tarea => !tarea.completada)
+contadorTareas()
+mostrarTareas();
+
+}
+
 /*
 se debe crear los acciones para marcar la tarea con estadoscompletada o urgente, adicionalmente
 la accion de eliminar💼📚🏠🔴🏷️❌
