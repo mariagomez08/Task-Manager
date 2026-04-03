@@ -1,21 +1,3 @@
-/*
-se debe crear un objeto que represente una tarea, con las siguientes propiedades:
-- id: un identificador único para cada tarea
-- nombre: el nombre de la tarea
-- categoria: la categoría a la que pertenece la tarea
-- completada: un booleano que indique si la tarea ha sido completada o no
-- urgente: un booleano que indique si la tarea es urgente o no
-
-Un botón "Limpiar completadas" que elimine de
-una vez todas las tareas marcadas como hechas,
-con un confirm() previo que indique cuántas se
-van a eliminar. filter, negacion completadas. hacer otro contador
-
-Una opción "Otra..." en el select que al elegirla
-revele un campo de texto donde el usuario
-escribe su propia categoría
-*/
-
 class Task {
   constructor(nombre, categoria) {
     this.nombre = nombre;
@@ -26,15 +8,18 @@ class Task {
   }
 
   generarFicha() {
+    const esUrgente = this.categoria === "urgente" || this.urgente;
+
     if (this.categoria === "trabajo") {
       return `${this.nombre} 💼`;
     } else if (this.categoria === "estudio") {
       return `${this.nombre} 📚`;
     } else if (this.categoria === "personal") {
       return `${this.nombre} 🏠`;
-    } else if (this.categoria === "urgente") {
-      this.urgente = true;//si se selecciona la categoria urgente actualiza el estado urgente a true
+    } else if (esUrgente) {
       return `${this.nombre} 🔴`;
+    } else {
+      return `${this.nombre} ${this.categoria} 🏷️`;
     }
   }
 }
@@ -43,47 +28,51 @@ let toDoTask = document.getElementById("to-do-task");
 let inputTarea = document.getElementById("tarea-input");
 let listaTarea = document.getElementById("lista-tarea");
 let inputCategoria = document.getElementById("categoria");
-let otraCategoria = document.getElementById("otra-categoria");
+let otraCategoriaInput = document.getElementById("otra-categoria-input");
 let inputError = document.getElementById("input-vacio");
 let botonAgregar = document.getElementById("agregarTarea");
-let botonEliminarCompletadas = document.getElementById("eliminarCompletadas")
+let botonEliminarCompletadas = document.getElementById("eliminarCompletadas");
+
 let tareas = [];
-let categorias = ["trabajo", "estudio", "personal","urgente"]
 let contador = 0;
 const MOSTRARERROR = "mostrarError";
 
 botonAgregar.addEventListener("click", () => {
   agregarTarea();
+
 });
 
+inputCategoria.addEventListener("change", () => {
+  if (inputCategoria.value === "otra") {
+    otraCategoriaInput.classList.add("visible");
+  } else {
+    otraCategoriaInput.classList.remove("visible");
+  }
+});
 
-/*
-La categoria otra podria tener un onclick que accione una funcion que lea ese input,
-puede ser con agregar tarea 
-*/
-/* si selecciona otra categoria tiene que desplegar un input para añadirla
-ese input debe pasarle a la variable categoria la nueva categoria y agregarla
-lo mejor entonces seria tener las categorias en una arreglo, las ya predefinidas y
-con push agregar la nueva
-habria que actualizar la categoria de la tarjeta enseguida apenas se ingresa, sin una tarea 
-no se puede agregar otra categoria
-
-
-*/
 function agregarTarea() {
-  let nombreTarea = inputTarea.value;
-  let categoriaTarea = inputCategoria.value;
+  let nombreTarea = inputTarea.value.trim();
+  let categoriaSeleccionada = inputCategoria.value;
+  let categoriaFinal = "";
 
-  if (nombreTarea.trim() && categoriaTarea.trim()) {
-    const nuevaTarea = new Task(nombreTarea, categoriaTarea);
+  if (categoriaSeleccionada === "otra") {
+    if (!otraCategoriaInput.value.trim()) {
+      visualizarError();
+      inputError.textContent = "Escribe una categoría personalizada";
+      return;
+    }
+    categoriaFinal = otraCategoriaInput.value.trim();
+  } else {
+    categoriaFinal = categoriaSeleccionada;
+  }
+
+  // Validación general
+  if (nombreTarea && categoriaFinal) {
+    const nuevaTarea = new Task(nombreTarea, categoriaFinal);
     ocultarError();
     tareas.push(nuevaTarea);
     mostrarTareas();
     contadorTareas();
-    console.log("Tarea agregada:", nombreTarea);
-    alert(
-      "✅ " + nombreTarea + " Tarea agregada con categoria " + categoriaTarea
-    );
     limpiarInput();
   } else {
     visualizarError();
@@ -91,22 +80,28 @@ function agregarTarea() {
 }
 //?actualizar funcion,  calcular total,calcular completadas, actualizar ambos spans
 function contadorTareas() {
-  totalTask.textContent= tareas.length
-  const tareascompletadas =  tareas.filter(tarea => tarea.completada).length
-  toDoTask.textContent =tareascompletadas
+  totalTask.textContent = tareas.length;
+  const tareascompletadas = tareas.filter((tarea) => tarea.completada).length;
+  toDoTask.textContent = tareascompletadas;
 
   if (tareascompletadas > 0) {
-    botonEliminarCompletadas.classList.add("oculto")
-} else {
-    botonEliminarCompletadas.classList.remove("oculto")
-}
+    botonEliminarCompletadas.classList.add("visible");
+  } else {
+    botonEliminarCompletadas.classList.remove("visible");
+  }
 }
 
-function actualizarVisibilidadBoton(){
-  
-}
+
+
 function mostrarTareas() {
   listaTarea.innerHTML = "";
+
+  if (tareas.length > 0) {
+    listaTarea.classList.add("agregarTarea");
+  } else {
+    listaTarea.classList.remove("agregarTarea");
+  }
+
   for (const tarea of tareas) {
     const tareaElement = document.createElement("div");
 
@@ -120,81 +115,84 @@ function mostrarTareas() {
           <button onClick="eliminarTarea('${tarea.id}')">🗑️Eliminar</button>
       </div>`;
     tareaElement.innerHTML = tarjetaTarea;
-    listaTarea.appendChild(tareaElement);
+    listaTarea.appendChild(tareaElement)
   }
-
 }
 
 function visualizarError() {
-  inputError.classList.add(MOSTRARERROR);
+  inputError.classList.add(MOSTRARERROR)
   inputError.textContent = "¡Ingrese el nombre de la tarea y la categoria!";
 }
 
 function ocultarError() {
-  inputError.classList.remove(MOSTRARERROR);
+  inputError.classList.remove(MOSTRARERROR)
 }
 
 function limpiarInput() {
   inputTarea.value = "";
   inputCategoria.value = "";
+  otraCategoriaInput.value = ""
+  otraCategoriaInput.classList.remove("visible")
 }
 
 function marcarTareaHecha(idTarea) {
+  //buscamos la tarea con find y se la asignamos a una const
+  const tareaHecha = tareas.find((tarea) => tarea.id === idTarea);
+  //si existe y esta incompleta cambia su estado a true
+  if (tareaHecha && !tareaHecha.completada) {
+    tareaHecha.completada = true;
 
-    //buscamos la tarea con find y se la asignamos a una const
-    const tareaHecha = tareas.find(tarea => tarea.id === idTarea)
-    //si existe y esta incompleta cambia su estado a true
-    if(tareaHecha && !tareaHecha.completada){
-      tareaHecha.completada = true
-
-            console.log(
-        "la tarea con id " + tareaHecha.id + "esta en estado " + tareaHecha.completada,
-      );
-    }
-    //aplicamos filter para conocer las tareas completadas y conocer el tamaño de los elemtnos que si cumplen la condicion
-    contadorTareas()
-    //renderizamos el html
-    mostrarTareas()
- 
+    console.log(
+      "la tarea con id " +
+      tareaHecha.id +
+      "esta en estado " +
+      tareaHecha.completada,
+    );
+  }
+  //aplicamos filter para conocer las tareas completadas y conocer el tamaño de los elemtnos que si cumplen la condicion
+  contadorTareas();
+  //renderizamos el html
+  mostrarTareas();
 }
 
 function marcarTareaUrgente(idTarea) {
-  tareas.map((tarea) => {
-    if (idTarea === tarea.id) {
-      tarea.urgente = true;
-      console.log("la tarea con id " + tarea.id + "es urgente");
-    }
-    return tarea;
-  });
+  const tareaUrgente = tareas.find((tarea) => idTarea === tarea.id);
+  if (!tareaUrgente) {
+    return;
+  }
+
+  tareaUrgente.urgente = true;
+  console.log("la tarea con id " + tareaUrgente.id + "es urgente");
+  mostrarTareas();
+  return tareaUrgente;
 }
 
 function eliminarTarea(idTarea) {
   //confirmar respuesta de si desea eliminar la tarea
-  const respuesta = confirm("¿Desea eliminar la tarea?")
+  const respuesta = confirm("¿Desea eliminar la tarea?");
 
-if (!respuesta) {
+  if (!respuesta) {
     return;
   }
-  //se realiza filter con las tareas que no se quieren eliminar 
-tareas = tareas.filter(tarea =>  tarea.id !== idTarea)
-//se asigna al contador el tmañao de las tareas completadas actuales
-contadorTareas();
+  //se realiza filter con las tareas que no se quieren eliminar
+  tareas = tareas.filter((tarea) => tarea.id !== idTarea);
+  //se asigna al contador el tmañao de las tareas completadas actuales
+  contadorTareas();
 
   mostrarTareas();
 }
 //? “Limpiar completadas” (con confirm y contador de cuantas se van a eliminar)
-function limpiarCompletadas(){
-
-
-const tareascompletadas = tareas.filter(tarea => tarea.completada).length
-let estado = confirm(`Hay ${tareascompletadas} completadas, ¿desea eliminarlas?`)
-if(!estado){
-  return;
-}
-tareas= tareas.filter(tarea => !tarea.completada)
-contadorTareas()
-mostrarTareas();
-
+function limpiarCompletadas() {
+  const tareascompletadas = tareas.filter((tarea) => tarea.completada).length;
+  let estado = confirm(
+    `Hay ${tareascompletadas} completadas, ¿desea eliminarlas?`,
+  );
+  if (!estado) {
+    return;
+  }
+  tareas = tareas.filter((tarea) => !tarea.completada);
+  contadorTareas();
+  mostrarTareas();
 }
 
 /*

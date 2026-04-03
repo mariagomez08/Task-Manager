@@ -19,7 +19,13 @@
 #eliminarCompletadas{
     display: none;
 }
-#eliminarCompletadas.oculto{
+#eliminarCompletadas.visible{
     display: block;
 }
 
+#otra-categoria-input{
+    display: none;
+}
+#otra-categoria-input.visible{
+    display: block;
+}
