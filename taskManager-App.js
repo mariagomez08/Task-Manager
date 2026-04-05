@@ -106,10 +106,10 @@ function mostrarTareas() {
     const tareaElement = document.createElement("div");
 
     const tarjetaTarea = `
-      <div class="tarjeta-tarea">
-          <div class="nombre-tarea">
-              <p>${tarea.generarFicha()}</p>
-          </div>
+  <div class="tarjeta-tarea ${tarea.urgente ? "tarea-urgente" : ""}">
+    <div class="nombre-tarea ${tarea.completada ? "tarea-completada" : ""}">
+      <p>${tarea.generarFicha()}</p>
+    </div>
           <button onClick="marcarTareaHecha('${tarea.id}')">✅Hecha</button>
           <button onClick="marcarTareaUrgente('${tarea.id}')">🔴Urgente</button>
           <button onClick="eliminarTarea('${tarea.id}')">🗑️Eliminar</button>

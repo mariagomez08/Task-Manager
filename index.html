@@ -8,7 +8,8 @@
   </head>
 
   <body>
-    <div class="contenedor">
+
+           <div class="app">
       <h1>TASK MANAGER</h1>
       <p>Organiza tu día</p>
       <div class="contador-tareas">
@@ -32,9 +33,14 @@
           <option value="urgente">🔴Urgente</option>
           <option value="otra">🏷️Otra</option>
         </select>
+        <br />
         <div>
           <label for="otra-categoria-input"></label>
-          <input id="otra-categoria-input" type="text" placeholder="Escribe otra categoria" />
+          <input
+            id="otra-categoria-input"
+            type="text"
+            placeholder="Escribe otra categoria"
+          />
         </div>
       </div>
 
@@ -46,11 +52,15 @@
 
       <br />
       <div id="lista-tarea" class="lista-tarea"></div>
+
       <div class="delete-button">
         <button id="eliminarCompletadas" onClick="limpiarCompletadas()">
           Eliminar tareas completadas
         </button>
       </div>
+    </div>
+
+
     </div>
 
     <script src="taskManager-App.js"></script>

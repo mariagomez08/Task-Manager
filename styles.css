@@ -1,31 +1,124 @@
-/* Estado base */
+body {
+  margin: 0;
+  font-family: "Lucida Console", "Courier New", monospace;
+  padding: 5%;
+  background: #7c7dc4c2;
+}
+.app {
+
+  padding: 5%;
+  border: 2px solid #593da8;
+  box-shadow: 5px 5px 10px rgba(54, 43, 68, 0.5);
+  border-radius: 8px; 
+}
+
+h1 {
+  font-size: 30px;
+  font-weight: 900;
+  margin-bottom: 10px;
+}
+/* FORMULARIO */
+.formulario-tareas {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* INPUTS */
+input,
+select {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #d2d2db77;
+}
+
+/* BOTÓN */
+button {
+  padding: 8px 8px;
+  border: none;
+  border-radius: 6px;
+  background: #6366f1;
+  color: white;
+  cursor: pointer;
+  font-family: "Lucida Console", "Courier New", monospace;
+  font-weight: 900;
+}
+
+button:hover {
+  background: #9c6297af;
+}
+.delete-button{
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+/* LISTA */
+.lista-tarea {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* TARJETA */
+.tarjeta-tarea {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #fafafa;
+}
+
+/* TEXTO */
+.nombre-tarea {
+  flex: 1;
+  word-break: break-word;
+}
+
+/* BOTONES DENTRO TAREA*/
+.tarjeta-tarea button {
+  font-size: 12px;
+  padding: 5px 8px;
+}
+
+/* COMPLETADA */
+.tarea-completada {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+/* URGENTE */
+.tarea-urgente {
+  background: #ffe5e5;
+  border: 1px solid #ff4d4d;
+}
+
+/* ERRORES */
 #input-vacio {
-  display: none; 
+  display: none;
   color: red;
 }
 
-/* Estado activo: El JS añade esta clase */
 #input-vacio.mostrarError {
   display: block;
 }
 
-#lista-tareas{
-    display: none;
-}
-#lista-tareas.agregarTarea{
-    display: block;
+/* BOTÓN ELIMINAR */
+#eliminarCompletadas {
+  display: none;
 }
 
-#eliminarCompletadas{
-    display: none;
-}
-#eliminarCompletadas.visible{
-    display: block;
+#eliminarCompletadas.visible {
+  display: block;
 }
 
-#otra-categoria-input{
-    display: none;
+/* INPUT OTRA */
+#otra-categoria-input {
+  display: none;
 }
-#otra-categoria-input.visible{
-    display: block;
+
+#otra-categoria-input.visible {
+  display: block;
 }
